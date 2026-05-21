@@ -1,0 +1,210 @@
+﻿@model List<QuizApp.Models.ResultDetailsModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    int total = Model.Count;
+
+    int correctCount = Model.Count(x =>
+    !string.IsNullOrEmpty(x.Selected) &&
+    x.Selected.Trim().ToLower() == x.Correct.Trim().ToLower());
+
+    int wrongCount = total - correctCount;
+}
+
+<style>
+
+    body {
+        background: #f4f6fb;
+    }
+
+    .result-container {
+        max-width: 1000px;
+        margin: auto;
+        padding: 15px;
+    }
+
+    .summary-box {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+    }
+
+    .summary-card {
+        flex: 1;
+        min-width: 200px;
+        padding: 20px;
+        border-radius: 15px;
+        color: white;
+        font-size: 22px;
+        font-weight: bold;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .total-box {
+        background: #007bff;
+    }
+
+    .correct-box {
+        background: #28a745;
+    }
+
+    .wrong-box {
+        background: #dc3545;
+    }
+
+    .question-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        border-left: 8px solid #dc3545;
+    }
+
+    .correct-card {
+        border-left-color: #28a745;
+    }
+
+    .question-title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        line-height: 1.5;
+    }
+
+    .answer-box {
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        font-size: 17px;
+    }
+
+    .your-answer {
+        background: #ffe5e5;
+        color: #b30000;
+    }
+
+    .correct-answer {
+        background: #e6ffed;
+        color: #006400;
+    }
+
+    .status-box {
+        display: inline-block;
+        padding: 6px 15px;
+        border-radius: 30px;
+        color: white;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .status-correct {
+        background: #28a745;
+    }
+
+    .status-wrong {
+        background: #dc3545;
+    }
+
+    @@media(max-width:768px) {
+        .summary-card {
+            font-size: 18px;
+            padding: 15px;
+        }
+
+        .question-title {
+            font-size: 17px;
+        }
+
+        .answer-box {
+            font-size: 15px;
+        }
+    }
+</style>
+
+<div class="result-container">
+
+    <h2 style="margin-bottom:25px;">
+        Exam Analysis
+    </h2>
+
+    <!-- SUMMARY -->
+    <div class="summary-box">
+
+        <div class="summary-card total-box">
+            Total Questions
+            <br /><br />
+            @total
+        </div>
+
+        <div class="summary-card correct-box">
+            Correct Answers
+            <br /><br />
+            @correctCount
+        </div>
+
+        <div class="summary-card wrong-box">
+            Wrong Answers
+            <br /><br />
+            @wrongCount
+        </div>
+
+    </div>
+
+    <!-- QUESTIONS -->
+    @foreach (var q in Model)
+    {
+        bool isCorrect =
+        !string.IsNullOrEmpty(q.Selected) &&
+        q.Selected.Trim().ToLower() == q.Correct.Trim().ToLower();
+
+        <div class="question-card @(isCorrect ? "correct-card" : "")">
+
+            <!-- QUESTION -->
+            <div class="question-title">
+
+                @q.Question
+
+            </div>
+
+            <!-- YOUR ANSWER -->
+            <div class="answer-box your-answer">
+
+                <b>Your Answer:</b>
+
+                @(string.IsNullOrEmpty(q.Selected)
+                ? "Not Answered"
+                : q.Selected)
+
+            </div>
+
+            <!-- CORRECT ANSWER -->
+            <div class="answer-box correct-answer">
+
+                <b>Correct Answer:</b>
+
+                @q.Correct
+
+            </div>
+
+            <!-- STATUS -->
+            @if (isCorrect)
+            {
+                <div class="status-box status-correct">
+                    ✔ Correct
+                </div>
+            }
+            else
+            {
+                <div class="status-box status-wrong">
+                    ✘ Wrong
+                </div>
+            }
+
+        </div>
+    }
+
+</div>

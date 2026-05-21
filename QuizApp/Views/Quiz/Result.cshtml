@@ -1,0 +1,14 @@
+﻿@model List<QuizApp.Models.ResultModel>
+
+<h2>Your Attempts</h2>
+
+@foreach (var r in Model)
+{
+    <div class="card">
+        <b>@r.TopicName</b><br />
+        Score: @r.Score / @r.Total <br />
+        Date: @r.CreatedAt <br /><br />
+
+        <a class="btn" href="/Quiz/ResultDetails?id=@r.Id">View Details</a>
+    </div>
+}

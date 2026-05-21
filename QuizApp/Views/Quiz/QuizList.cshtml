@@ -1,0 +1,142 @@
+﻿@model List<QuizApp.Models.QuizTopic>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+
+    body {
+        background: #f4f6fb;
+    }
+
+    .quiz-container {
+        max-width: 1000px;
+        margin: auto;
+        padding: 15px;
+    }
+
+    .quiz-title {
+        font-size: 30px;
+        font-weight: bold;
+        margin-bottom: 25px;
+    }
+
+    .quiz-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .quiz-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        transition: 0.3s;
+    }
+
+        .quiz-card:hover {
+            transform: translateY(-3px);
+        }
+
+    .attempted-card {
+        background: #d4edda;
+        border-left: 8px solid #28a745;
+    }
+
+    .quiz-name {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .attempt-badge {
+        display: inline-block;
+        background: #28a745;
+        color: white;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 14px;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+
+    .start-btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+        background: #007bff;
+        color: white;
+        text-decoration: none;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 17px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+        .start-btn:hover {
+            background: #0056b3;
+        }
+
+    @@media(max-width:768px) {
+        .quiz-title {
+            font-size: 24px;
+        }
+
+        .quiz-name {
+            font-size: 19px;
+        }
+
+        .start-btn {
+            font-size: 15px;
+        }
+    }
+</style>
+
+<div class="quiz-container">
+
+    <div class="quiz-title">
+        Available Exams
+    </div>
+
+    <div class="quiz-grid">
+
+        @foreach (var q in Model)
+        {
+            <div class="quiz-card @(q.IsAttempted ? "attempted-card" : "")">
+
+                <!-- QUIZ NAME -->
+                <div class="quiz-name">
+
+                    @(string.IsNullOrEmpty(q.TopicName)
+                    ? "Untitled Exam"
+                    : q.TopicName)
+
+                </div>
+
+                <!-- ATTEMPTED -->
+                @if (q.IsAttempted)
+                {
+                    <div class="attempt-badge">
+
+                        ✔ Already Attempted
+
+                    </div>
+                }
+
+                <!-- BUTTON -->
+                <a href="/Quiz/Start?topicId=@q.Id"
+                   class="start-btn">
+
+                    Start Exam
+
+                </a>
+
+            </div>
+        }
+
+    </div>
+
+</div>
